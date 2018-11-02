@@ -13,6 +13,7 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index($locale)
     {   
         app()->setLocale($locale);
@@ -20,6 +21,11 @@ class ProductController extends Controller
         return view('products',compact('products'));
     }
 
+    public function product()
+    {   
+        $products=Product::get();
+        return view('products',compact('products'));
+    }
     /**
      * Show the form for creating a new resource.
      *

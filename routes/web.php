@@ -16,7 +16,7 @@ Route::get('/products', function () {
 });
 
 Auth::routes();
-Route::get('/','ProductController@index');
+Route::get('/','ProductController@product');
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('profile','UserController@profile');
 Route::post('profile','UserController@update_avatar');

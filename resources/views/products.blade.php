@@ -2,6 +2,7 @@
 @section('content')
 <body>
     <div class="container">
+        @if(Auth::check())
         <button class="btn btn-success" id="btn-create">Create Product</button>
         <h3>Products</h3>
         <div id="inputform">
@@ -52,7 +53,7 @@
                 </div>
             </form>
         </div>
-        
+        @endif
             <span>Total:
                 <div id="sumTotal"></div>
         </span>
@@ -64,10 +65,11 @@
                     @foreach($products as $image)
             <div class="col-md-4 col-lg-4 col-xs-12">
 <div class="panel panel-default">
+                    @if(Auth::check())
                     <form action="{{ route('products.delete',$image->id) }}" method="GET">
                         <button type="submit" class="close-icon btn btn-danger pull-right"><i class="glyphicon glyphicon-remove"></i></button>
                     </form>
-                    
+                    @endif
                     <div class="panel-body"><center><img class="img-responsive" style="height: 160px;widows: 100px;" alt="" src="/images/{{ $image->image }}" /></center></div>
                     
                     <div class="panel-footer">
