@@ -1,7 +1,16 @@
 @extends('layouts.app')
 @section('content')
+
 <body>
     <div class="container">
+
+     @if ($message = Session::get('success'))
+        <div class="alert alert-success alert-block">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <strong>{{ $message }}</strong>
+        </div>
+
+        @endif
         @if(Auth::check())
         <button class="btn btn-success" id="btn-create">Create Product</button>
         <h3>Products</h3>
@@ -18,12 +27,8 @@
                     </ul>
                 </div>
                 @endif
-                @if ($message = Session::get('success'))
-                <div class="alert alert-success alert-block">
-                    <button type="button" class="close" data-dismiss="alert">×</button>
-                    <strong>{{ $message }}</strong>
-                </div>
-                @endif
+
+               
                 <div class="row">
                     <div class="col-md-5">
                         <strong>{{(trans('lang.title'))}}</strong>
@@ -58,13 +63,13 @@
                 <div id="sumTotal"></div>
         </span>
    
-        
+        <div id="displayProducts">
         @if($products->count())
         <div class="row">
                 
                     @foreach($products as $image)
             <div class="col-md-4 col-lg-4 col-xs-12">
-<div class="panel panel-default">
+            <div class="panel panel-default">
                     @if(Auth::check())
                     <form action="{{ route('products.delete',$image->id) }}" method="GET">
                         <button type="submit" class="close-icon btn btn-danger pull-right"><i class="glyphicon glyphicon-remove"></i></button>
@@ -101,13 +106,13 @@
                                 <div class="modal-body">
                                     <div class="row">
                                         <div class="form-group col-xs-6">
-                                            <input type="number" name="amount" placeholder="quanity" class="qty" data-price="{{$image->price}}">
+                                            <input type="number" name="amount" placeholder="quanity" class="qty" data-price="{{$image->price}}" >
                                         </div>
                                         <div class="form-group col-xs-6 total"><label>Total:</label></div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary price" >Save changes</button>
+                                        <button type="submit" class="btn btn-primary price submitprice" data-price="{{$image->price}}" data-id="{{$image->id}}" data-name="{{$image->name}}" >Save changes</a>
                                     </div>
                                 </div>
                             </div>
@@ -118,34 +123,51 @@
             </div>
                     @endforeach
                     
-                
+                <div id="productslist">
+                    @include('cart')
+                </div>
+
             @endif
+
             </div> <!-- list-group / end -->
+        </div>
             </div> <!-- row / end -->
  <script type="text/javascript">
      $(document).ready(function(){
             $('#inputform').hide();
          $('#btn-create').click(function(){
             $('#inputform').show();
+            $('#displayProducts').hide();
         });
          var subtotal=0;
+         var qty=0;
        $('.qty').on('change',function(){
-        var qty=$(this).val();
-        console.log('quantity'+qty);
-            var unitPrice=$(this).data('price');
-            var tot=qty*unitPrice;
-            console.log('unitPrice'+unitPrice);
-            $(this).closest('div').html(tot);
-            console.log('item:'+tot);
+         qty=$(this).val();
             
-            subtotal=subtotal+tot;
-            $('#sumTotal').html(subtotal);
-            console.log(subtotal);
        });
-            
+          
+          $(".submitprice").on('click',function(){
+            var id=$(this).data('id');
+            var price=$(this).data('price');
+            var name=$(this).data('name');
+            $.ajax({
+                type:"get",
+                url:"/products/addTocart/"+id,
+                data:{
+                    id:id,
+                    price:price,
+                    qty:qty,
+                    name:name
+                },
+                success:function(data){
+                    $("#productslist").html(data);
+                }
+               
+            });
+          });
+           
         });
 
       
   </script>
             @endsection
-        </html>

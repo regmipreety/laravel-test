@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Product;
 use App\Reviews;
 use Auth;
+use Session;
+use Log;
 class ProductController extends Controller
 {
     /**
@@ -18,6 +20,9 @@ class ProductController extends Controller
     {   
         app()->setLocale($locale);
         $products=Product::get();
+        Session::flush();
+        Session::save();
+
         return view('products',compact('products'));
     }
 
@@ -120,6 +125,24 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         //
+    }
+
+    public function addTocart(Request $request,$id){
+
+        $cart = Session::get('cart');
+        $cart[$id] = [
+        "id" => $request->id,
+        "name" => $request->name,
+        "price" => $request->price,
+        "qty" => $request->qty];
+  
+
+    Session::put('cart', $cart);
+    // Session::flash('success','barang berhasil ditambah ke keranjang!');
+   echo view('cart');
+   // exit();
+    // return response()->json(['msg' =>'success']);
+    // return redirect()->back()->with('success','added to cart');
     }
 
     /**

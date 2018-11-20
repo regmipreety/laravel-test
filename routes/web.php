@@ -25,3 +25,4 @@ Route::post('products','ProductController@store');
 Route::get('products/{id}/delete','ProductController@destroy')->name('products.delete');
 Route::get('products/{id}/show','ProductController@show')->name('products.show');
 Route::post('products/{id}/reviews','ProductController@reviews')->name('products.reviews');
+Route::get('/products/addTocart/{id}','ProductController@addTocart');
