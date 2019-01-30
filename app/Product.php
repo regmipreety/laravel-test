@@ -9,7 +9,7 @@ class Product extends Model
     protected $table='products';
     protected $fillable=['name','price','discount','stock','image'];
 
-    function review(){
+    public function reviews(){
     	return $this->hasMany(Reviews::class,'product_id');
     }
 }

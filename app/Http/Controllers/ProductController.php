@@ -8,6 +8,7 @@ use App\Reviews;
 use Auth;
 use Session;
 use Log;
+use Illuminate\Support\Facades\Input;
 class ProductController extends Controller
 {
     /**
@@ -18,17 +19,20 @@ class ProductController extends Controller
 
     public function index($locale)
     {   
+
         app()->setLocale($locale);
+        Session::forget('cart');
+        
         $products=Product::get();
-        Session::flush();
-        Session::save();
 
         return view('products',compact('products'));
+
     }
 
     public function product()
     {   
         $products=Product::get();
+        
         return view('products',compact('products'));
     }
     /**
@@ -54,53 +58,50 @@ class ProductController extends Controller
               
             'name' => 'required',
             'price'=>'required|integer',
+            'photos'=>'required'
 
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            // 'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
 
         ]);
+             if($request->hasFile('photos')){
+                $allowedfileExtension=['jpg','jpeg','png'];
+                $files=$request->file('photos');
+                foreach($files as $file){
+                    $filename=$file->getClientOriginalName();
+                    $extension=$file->getClientOriginalExtension();
+                    $check=in_array($extension,$allowedfileExtension);
+                    //dd($check);
+                    if($check){
+                    
+                             $file->move(public_path('images'), $filename);
+                                $input['name'] = $request->name;
+                                 $input['price']=$request->price;
+                                 $input['discount']=$request->discount;
+                                 $input['stock']=$request->stock;
+                                 $input['image']=$filename;
 
+                        Product::create($input);
+                        }
+                        }  
 
-        $input['image'] = time().'.'.$request->image->getClientOriginalExtension();
+                         return back()
 
-        $request->image->move(public_path('images'), $input['image']);
-       // $request->image->storeAs('images',$input['image']);
+             ->with('success','Product Uploaded successfully.');
 
+                    }
+                    else{
+                        echo '<div class="alert alert-warning"><strong>Warning!</strong> Sorry Only Upload png , jpg , doc</div>';
+                    }
+                }
+             
 
-        $input['name'] = $request->name;
-        $input['price']=$request->price;
-        $input['discount']=$request->discount;
-        $input['stock']=$request->stock;
-
-        Product::create($input);
-
-
-        return back()
-
-            ->with('success','Product Uploaded successfully.');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function show($id)
+   
     {
-        $products=Product::findOrFail($id);
-
-        $result = array(
-            'products' => $products,
-        );
-        return view('details',compact('result'));
+        $product=Product::findOrFail($id);
+        return view('details',compact('product'));
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
 
     public function reviews(Request $request,$id){
         //$product=Product::get();
@@ -109,23 +110,48 @@ class ProductController extends Controller
         Reviews::create($input);
         return back()->with('success','Review added successfully');
 
+
     }
+   
     public function edit($id)
     {
-        //
+        $product=Product::findOrFail($id);
+        return view('edit',compact('product'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+   
     public function update(Request $request, $id)
     {
-        //
-    }
+       $product=Product::findOrFail($id);
+       $request->validate([
+        'name' => 'required',
+        'price'=>'required|integer',
+       ]);
+       $product->name=$request->name;
+       $product->price=$request->price;
+       $product->discount=$request->discount;
+       $product->stock=$request->stock;
+       //dd($request->image);
+        $images = Input::file('image');
+    if (Input::hasfile('image')) {
+         $image_path = public_path("images/{$product->image}");
+            unlink($image_path);
+             $request->validate([
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+
+        ]);
+         $filename  = $images->getClientOriginalName();
+            $images->move(public_path('images'), $filename);
+            $product->image = $filename;
+
+        }            
+            $product->save();
+
+            return redirect()->route('products.show',$id)
+                ->with('success', 'Product Updated');
+        }
+    
+    
 
     public function addTocart(Request $request,$id){
 
@@ -134,15 +160,13 @@ class ProductController extends Controller
         "id" => $request->id,
         "name" => $request->name,
         "price" => $request->price,
-        "qty" => $request->qty];
+        "qty" => $request->qty
+    ];
   
 
     Session::put('cart', $cart);
-    // Session::flash('success','barang berhasil ditambah ke keranjang!');
    echo view('cart');
-   // exit();
-    // return response()->json(['msg' =>'success']);
-    // return redirect()->back()->with('success','added to cart');
+ 
     }
 
     /**
@@ -154,7 +178,15 @@ class ProductController extends Controller
     public function destroy($id)
     {
         $products =Product::findOrFail($id);
+         $image_path = public_path("images/{$products->image}");
+         //dd($image_path);
+         if (\File::exists($image_path)) {
+             
+            unlink($image_path);
+    }
         $products->delete();
         return back();
     }
+
+    
 }
