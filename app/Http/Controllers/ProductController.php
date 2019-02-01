@@ -79,7 +79,12 @@ class ProductController extends Controller
                                  $input['discount']=$request->discount;
                                  $input['stock']=$request->stock;
                                  $input['image']=$filename;
-
+                                 $data=[
+                                 'type'=>$request->type,
+                                 'country'=>$request->country
+                                ];
+                                $data=json_encode($data);
+                                 $input['description']=$data;
                         Product::create($input);
                         }
                         }  

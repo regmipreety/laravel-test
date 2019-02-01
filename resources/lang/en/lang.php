@@ -7,6 +7,8 @@ return[
 'discount'=>'Discount',
 'stock'=>'Stock',
 'image'=>'Image',
-'upload'=>'Upload'
+'upload'=>'Upload',
+'type'=>'Type',
+'country'=>'Country'
 ];
 ?>

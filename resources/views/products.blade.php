@@ -47,19 +47,27 @@
                         <strong>{{(trans('lang.stock'))}}</strong>
                         <input type="number" name="stock" class="form-control">
                     </div>
+          
+                    <br><br>
+                    <div class="col-md-5">
+                        <strong>{{(trans('lang.type'))}}</strong>
+                        <input type="text" name="type" class="form-control">
+                    </div>
+                    <div class="col-md-5">
+                        <strong>{{(trans('lang.country'))}}</strong>
+                        <input type="text" name="country" class="form-control">
+                    </div>
                     <div class="col-md-5">
                         <strong>{{(trans('lang.image'))}}</strong>
-                        <!-- <input type="file" name="image" class="form-control"> 
-                        -->
                         <br><br>
                     Product photos (can attach more than one): <br>
                     <input type="file" name="photos[]" multiple  type="file"> 
-                    <br><br>
                     </div>
                     <div class="col-md-2">
                         <br/>
                         <button type="submit" class="btn btn-success">{{(trans('lang.upload'))}}</button>
                     </div>
+                
                 </div>
             </form>
         </div>
@@ -78,8 +86,6 @@
                     @if(Auth::check())
                     <form action="{{ route('products.delete',$image->id) }}" method="GET">
                         <button type="submit" class="close-icon btn btn-danger pull-right"><i class="glyphicon glyphicon-remove"></i></button>
-
-
                     </form>
                     <form action='{{route("products.edit",$image->id)}}' method="get">
                         <button type="submit" class="close-icon btn btn-danger pull-left"><i class="glyphicon glyphicon-pencil"></i></button>

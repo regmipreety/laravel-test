@@ -13,6 +13,8 @@
       <th scope="col">Price</th>
       <th scope="col">Discount</th>
       <th scope="col">Stock</th>
+      <th scope="col">Type</th>
+      <th scope="col">Country</th>
       <th scope="col">Image</th>
 </tr>
   </thead>
@@ -24,6 +26,10 @@
       <td>{{$product->price}}</td>
       <td>{{$product->discount}}</td>
       <td>{{$product->stock}}</td>
+
+      @foreach(json_decode($product->description, true) as $key => $value)
+    <td> {{ $value }}</td> 
+    @endforeach
       <td><img class="img-responsive" alt="" src="/images/{{ $product->image }}" style="height: 100px;width: 100px" /></td>
   
     </tr>
