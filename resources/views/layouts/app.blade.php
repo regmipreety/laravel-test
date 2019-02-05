@@ -20,13 +20,18 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+     <link rel="stylesheet" href="{{asset('css/jquery.typeahead.min.css')}}">
      <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
   
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
      <!-- Scripts -->
-    <!-- <script src="{{ asset('js/app.js') }}" defer></script> -->
+    <script src="{{ asset('js/bootstrap-select.js') }}"></script>
+    <script src="{{ asset('js/countrypicker.min.js') }}"></script>
 
-    <script src="{{ asset('js/jquery-ui.js') }}" defer></script>
+    <script type="text/javascript" src="{{ asset('js/bootstrap3-typeahead.min.js') }}"></script>
+
 
 
     <style>

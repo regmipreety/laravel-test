@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('content')
-
 <div class="container">
   @if ($message = Session::get('success'))
      <strong>{{ $message }}</strong>
   @endif
+  
 <table class="table">
   <thead>
     <tr>

@@ -79,6 +79,7 @@ class ProductController extends Controller
                                  $input['discount']=$request->discount;
                                  $input['stock']=$request->stock;
                                  $input['image']=$filename;
+
                                  $data=[
                                  'type'=>$request->type,
                                  'country'=>$request->country
@@ -122,6 +123,15 @@ class ProductController extends Controller
     {
         $product=Product::findOrFail($id);
         return view('edit',compact('product'));
+    }
+
+     public function autocomplete(Request $request)
+    {
+        $data = Product::select("name","id")
+                ->where("name","LIKE","%{$request->querry['term']}%")
+                ->get();
+                 
+        return response()->json($data);
     }
 
    

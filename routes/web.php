@@ -25,7 +25,7 @@ Route::post('products','ProductController@store');
 Route::get('products/{id}/delete','ProductController@destroy')->name('products.delete');
 Route::get('products/{id}/edit','ProductController@edit')->name('products.edit');
 Route::post('products/{id}/update','ProductController@update')->name('products.update');
-
+Route::get('autocomplete','ProductController@autocomplete')->name('autocomplete');
 
 Route::get('products/{id}/show','ProductController@show')->name('products.show');
 Route::post('products/{id}/reviews','ProductController@reviews')->name('products.reviews');

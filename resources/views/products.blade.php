@@ -28,7 +28,7 @@
                 </div>
                 @endif
 
-               
+              
                 <div class="row">
                     <div class="col-md-5">
                         <strong>{{(trans('lang.title'))}}</strong>
@@ -49,13 +49,18 @@
                     </div>
           
                     <br><br>
+
+
                     <div class="col-md-5">
                         <strong>{{(trans('lang.type'))}}</strong>
                         <input type="text" name="type" class="form-control">
                     </div>
+
                     <div class="col-md-5">
                         <strong>{{(trans('lang.country'))}}</strong>
-                        <input type="text" name="country" class="form-control">
+                      <br><br>
+                        <select class="selectpicker countrypicker" data-live-search="true"data-default="Nepal"data-flag="true" name="country"></select>
+
                     </div>
                     <div class="col-md-5">
                         <strong>{{(trans('lang.image'))}}</strong>
@@ -75,7 +80,13 @@
             <span>Total:
                 <div id="sumTotal"></div>
         </span>
-   
+         <div class="row">
+            <div class="col-md-4 pull-right">
+                    Search:<input class="typeahead form-control" type="text" name="search" data-provide="typeahead" autocomplete="off">
+               </div>
+           </div>
+           <br><br>
+
         <div id="displayProducts">
         @if($products->count())
         <div class="row">
@@ -186,5 +197,30 @@
 
       
   </script>
+  <script type="text/javascript">
+    var path = "{{ route('autocomplete') }}";
+
+    if( $('input.typeahead').length ) 
+        { 
+            $.get(path, function(data){
+        $("input.typeahead").typeahead({
+            "items": "all",
+            "source": data,
+            "autoSelect": false,
+            displayText: function(item){
+                return item.name;
+            },
+            updater: function(item) {
+                window.location.href = '/products/' + item.id+/show/;
+            }
+        });
+    },'json');
+
+      };
+
+
+
+   
+</script>
  
             @endsection

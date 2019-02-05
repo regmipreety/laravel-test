@@ -31,6 +31,7 @@
                                 <strong>{{(trans('lang.discount'))}}</strong>
                                 <input type="text" name="discount" class="form-control" value="{{$product->discount}}">
                             </div>
+                            
                             <div class="col-md-5">
                                 <strong>{{(trans('lang.stock'))}}</strong>
                                 <input type="number" name="stock" class="form-control" value="{{$product->stock}}">
