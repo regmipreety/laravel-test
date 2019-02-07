@@ -109,6 +109,13 @@ class ProductController extends Controller
         return view('details',compact('product'));
     }
 
+    public function list(Request $request){
+        $products= Product::price_range($request->max,$request->min);
+        echo view('ajax_search',compact('products'));
+        exit();
+
+    }
+
     public function reviews(Request $request,$id){
         //$product=Product::get();
         $input['product_id']=$id;

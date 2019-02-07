@@ -16,6 +16,8 @@ Route::get('/products', function () {
 });
 
 Auth::routes();
+Route::get('products/filter','ProductController@list')->name('products.list');
+
 Route::get('/','ProductController@product');
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('profile','UserController@profile');
